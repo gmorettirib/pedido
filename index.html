@@ -353,13 +353,13 @@ btnNao.addEventListener('click', e => { e.preventDefault(); fugir(); });
 
 // ===== SLIDES =====
 const slides = [
-  { img: 'img/foto1.jpeg' },
+  { img: 'img/foto7.jpeg' },
   { img: 'img/foto2.jpeg', texto: 'Festa junina juntos' },
   { img: 'img/foto3.jpeg', texto: 'Par perfeito' },
   { img: 'img/foto4.jpeg', texto: 'Nossa música' },
   { img: 'img/foto5.jpeg', texto: 'Flor do sertão' },
   { img: 'img/foto6.jpeg', texto: 'Alegria total' },
-  { img: 'img/foto7.jpeg', texto: 'Par perfeito' },
+  { img: 'img/foto1.jpeg', texto: 'Par perfeito' },
   { img: 'img/foto8.jpeg', texto: 'Nossa música' },
   { img: 'img/foto9.jpeg', texto: 'Flor do sertão' },
   { img: 'img/foto10.jpeg', texto: 'Alegria total' },
@@ -430,39 +430,9 @@ function lancarConfetes(qtd) {
   }
 }
 
-// ===== MUSICA =====
-let audioCtx = null, musicaAtiva = false;
-function nota(ctx, freq, t, dur, vol) {
-  const o = ctx.createOscillator(), g = ctx.createGain();
-  o.connect(g); g.connect(ctx.destination);
-  o.type = 'sawtooth';
-  o.frequency.setValueAtTime(freq, t);
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(vol, t + 0.02);
-  g.gain.linearRampToValueAtTime(0, t + dur);
-  o.start(t); o.stop(t + dur);
-}
-function tocarForro() {
-  if (musicaAtiva) return;
-  musicaAtiva = true;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const seq = [329.6,392,440,392,329.6,293.7,329.6,392,440,493.9,440,392,329.6,293.7,261.6,293.7];
-    const bpm = 138, col = 60/bpm/2, total = seq.length * col;
-    for (let loop = 0; loop < 30; loop++) {
-      const off = audioCtx.currentTime + loop * total;
-      seq.forEach((f, i) => {
-        nota(audioCtx, f, off + i*col, col*0.85, 0.1);
-        if (i%2===0) nota(audioCtx, f/2, off + i*col, col*1.8, 0.07);
-      });
-    }
-  } catch(e) {}
-}
-
 // ===== SIM =====
 function simClick() {
   lancarConfetes(60);
-  tocarForro();
   setTimeout(() => {
     document.getElementById('tela-sim').classList.add('active');
     criarBandeirinhas('bandeiras-sim', cores, 16);
