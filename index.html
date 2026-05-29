@@ -77,7 +77,7 @@
   .btn-nao {
     background: #E63946;
     color: white;
-    position: fixed;
+    position: static;
     transition: left 0.12s ease, top 0.12s ease;
   }
 
@@ -198,12 +198,12 @@
   /* Responsive tweaks */
   @media (max-width: 520px) {
     body { padding: 60px 12px 16px; gap: 18px; }
-    .botoes { flex-direction: column; gap: 12px; }
+    .botoes { flex-direction: row; gap: 12px; flex-wrap: nowrap; }
     .btn { width: min(88vw, 240px); font-size: 1.4rem; }
     .slide-legenda { font-size: 1rem; padding: 8px 6px; }
     .titulo-sim { font-size: clamp(1.6rem, 6vw, 2.4rem); }
     .player-area { padding: 8px 16px; }
-    .btn-nao { position: relative !important; left: auto !important; top: auto !important; transform: none !important; }
+    .btn-nao { left: auto !important; top: auto !important; transform: none !important; }
   }
 
   @keyframes cair {
@@ -325,14 +325,7 @@ window.addEventListener('resize', () => {
 
 // ===== BOTAO NAO FOGE =====
 const btnNao = document.getElementById('btn-nao');
-const btnSim = document.getElementById('btn-sim');
 let tentativas = 0;
-
-function posicaoInicial() {
-  const sr = btnSim.getBoundingClientRect();
-  btnNao.style.left = (sr.right + 24) + 'px';
-  btnNao.style.top = sr.top + 'px';
-}
 
 function fugir() {
   const margin = 20;
@@ -340,6 +333,7 @@ function fugir() {
   const bh = btnNao.offsetHeight;
   const maxX = window.innerWidth - bw - margin;
   const maxY = window.innerHeight - bh - margin;
+  btnNao.style.position = 'fixed';
   btnNao.style.left = (margin + Math.random() * maxX) + 'px';
   btnNao.style.top = (margin + Math.random() * maxY) + 'px';
   tentativas++;
@@ -356,7 +350,6 @@ function fugir() {
 btnNao.addEventListener('mouseover', fugir);
 btnNao.addEventListener('touchstart', e => { e.preventDefault(); fugir(); });
 btnNao.addEventListener('click', e => { e.preventDefault(); fugir(); });
-setTimeout(posicaoInicial, 100);
 
 // ===== SLIDES =====
 const slides = [
